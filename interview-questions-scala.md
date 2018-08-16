@@ -274,11 +274,42 @@ Type classes are useful when you want to implement common functionality for an a
 
 [Example type class.](https://gist.github.com/davegurnell/a614c67e8d52c113d36d)
 
-It is a form of polymorphism, similar to subtyping, where you can implement method instances for subtypes of a class or trait.
+Implicit derivation is a very useful feature of type classes.
+It means that type classes with type parameters can use already defined type classes.
+ Example: 
+```scala
+trait Show[A] {
+  def show(a: A): String
+}
 
-Type class instances with type parameters (eg: `List[A]`) can substitute other instances from the same type class to the type parameter. Eg: a type class for `List[A]` can substitute type class instances to the `A` type parameter. So if there are instances defined for `Int` and `String` `List[Int]` and `List[String]` don't need a new implementation, because they can use `List[A]`'s implementation.
+def show[A](a: A)(implicit ts: Show[A]): String = {
+  ts.show(a)
+}
 
-This means that they can be a very useful tool in library design. Type classes can be easily extended/overwritten in application code.
+def instance[A](f: A => String): Show[A] = new Show[A]{
+  override def show(a: A): String = f(a)
+}
+
+implicit val intShow: Show[Int] = instance(x => s"int $x")
+
+implicit val stringShow: Show[String] = instance(x => s"string $x")
+
+// Note that `listShow` requires an implicit Show[A] parameter 
+implicit def listShow[A](implicit ts: Show[A]): Show[List[A]] =
+  instance(xs => xs.map(x => show(x)).mkString("list(", ", ", ")"))
+//`listShow` can use the previously defined `intShow` and `stringShow` instances
+// So we don't need to specifically implement an instance for type `List[Int]` and `List[String]`
+
+println(show(List("This", "is", "a", "list")))
+// output will be: list(string This, string is, string a, string list)
+
+println(show(List(1, 2, 3, 4)))
+// output will be: list(int 1, int 2, int 3, int 4)
+
+// println(show(List(1.0, 2.0, 3.0, 4.0))) // wouldn't compile
+```
+
+Type classes can be a very useful tool in library design, because they can be easily extended/overwritten in application code, since there's no need for a common supertype.
 
 Some example use cases: Json libraries (Circe), Cats library
 
