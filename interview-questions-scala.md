@@ -201,10 +201,10 @@ All these features are added by Scala Compiler at compile-time. It is not possib
 
 ### What is a Higher-Order Function?
 
-Higher Order Function (HOF) is also a function but which performs one, two or both of the following things:
+Higher Order Function is also a function but which performs one, two or both of the following things:
 
-    Take other functions as arguments
-    Return functions as their results
+* Take other functions as arguments
+* Return functions as their results
 
 ### What are the Java’s OOP constructs not supported by Scala? What are Scala’s OOP constructs not supported by Java? What are the new OOPs constructs introduced by Scala, but not supported by Java?
 
@@ -222,11 +222,13 @@ The new OOPs constructs introduced by Scala, but not supported by Java:
 
 ### What are call-by-name and call-by-value function parameters?
 
-Scala's default type of function parameters are _call-by-value_ parameters. _Call-by-value_ parameters are evaluated once, when a function is called.
+Scala's default type of function parameters are _call-by-value_ parameters. _Call-by-value_ parameters are evaluated once, when the function is called.
 
 _Call-by-name_ parameters are not evaluated when the function is called, but they are evaluated each time we use them in that function. You can think of _call-by-name_ parameters as a function with zero parameters (eg: `f: () => A`), but we don't need to write the empty parameter list. This is reflected in their syntax as well `f: => A`
 
 ### What is a trait in Scala?
+_“Interfaces that can provide concrete members.”_
+
 Traits are similar to Java interfaces.
 They can share methods and fields with classes and objects which extend a trait.
 As opposed to Java interfaces traits can hold implementations of methods and fields.
@@ -267,13 +269,18 @@ Implicit parameters: implicit context, type class, etc.
 Implicit classes: extension methods
 Implicit conversions: automatically converting types, should be used with care, too general types can lead to trouble
 
-### What is a type class? How does it relate to subtyping?
+### What is a type class?
 Type classes are useful when you want to implement common functionality for an arbitrary set of types.
-It is a form of polymorphism, similar to subtyping, where you can implement method instances for subtypes of a class or trait, but type class instances don't need to be in a subtyping relationship, one can easily implement a type class instance for any type.
+
+[Example type class.](https://gist.github.com/davegurnell/a614c67e8d52c113d36d)
+
+It is a form of polymorphism, similar to subtyping, where you can implement method instances for subtypes of a class or trait.
+
+Type class instances with type parameters (eg: `List[A]`) can substitute other instances from the same type class to the type parameter. Eg: a type class for `List[A]` can substitute type class instances to the `A` type parameter. So if there are instances defined for `Int` and `String` `List[Int]` and `List[String]` don't need a new implementation, because they can use `List[A]`'s implementation.
 
 This means that they can be a very useful tool in library design. Type classes can be easily extended/overwritten in application code.
 
-Some examples: Json libraries (Circe), Cats library
+Some example use cases: Json libraries (Circe), Cats library
 
 ### What is covariace, invariance and contravariance in Scala?
 (A <: B means A is a subtype of B)
@@ -332,6 +339,9 @@ Either before and after 2.12 (It became right biased in 2.12)
 * DI framework/lib (eg: MacWire)
 * Cake Pattern
 * Reader monad
+
+
+### What is the cake pattern?
 
 ### OOP Design patterns in Scala
 
