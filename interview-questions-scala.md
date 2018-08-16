@@ -19,12 +19,14 @@ Types can be inferred by the Scala Compiler at compile-time. It is known as “T
 In simple words, determining the type of a variable or expression or object etc at compile-time by compiler is known as “Type Inference”.
 
 ### What is a side effect?
-A side effect is modifying a non-local or a static variable, using IO or calling another side effecting function.
+A side effect is:
+* modifying a non-local or a static variable
+* using IO 
+* calling another side effecting function.
 
 ### What is a pure function?
 * No side effects
 * Always returns the same outputs for the same inputs
-
 
 ### What's the difference between methods and functions?
 In Scala methods and functions are different syntactially and semantically as well.
@@ -71,10 +73,10 @@ In Scala, Unit is used to represent “No value” or “No Useful value”. Uni
 
 Unit is something similar to Java’s void. But they have few differences.
 
-    Java’s void does not any value. It is nothing.
-    Scala’s Unit has one value ()
-    () is the one and only value of type Unit in Scala. However, there are no values of type void in Java.
-    Java’s void is a keyword. Scala’s Unit is a final class.
+* Java’s void does not any value. It is nothing.
+* Scala’s Unit has one value ()
+* () is the one and only value of type Unit in Scala. However, there are no values of type void in Java.
+* Java’s void is a keyword. Scala’s Unit is a final class.
 
 Both are used to represent a method or function is not returning anything.
 
@@ -131,7 +133,6 @@ class Person (firstName: String, middleName:String, lastName: String){
 ### Difference between Array and List in Scala?
 
 * Arrays are always Mutable where as List is always Immutable.
-* Once created, We can change Array values where as we cannot change List Object.
 * Arrays are Invariants where as Lists are Covariants.
 
 
@@ -205,7 +206,7 @@ Higher Order Function (HOF) is also a function but which performs one, two or bo
     Take other functions as arguments
     Return functions as their results
 
-### What are the Java’s OOP constructs not supported by Scala? What are the Scala’s OOP constructs not supported by Java? What are the new OOPs constructs introduced by Scala, but not supported by Java?
+### What are the Java’s OOP constructs not supported by Scala? What are Scala’s OOP constructs not supported by Java? What are the new OOPs constructs introduced by Scala, but not supported by Java?
 
 Java’s OOP constructs, which are not supported by Scala:
 
@@ -217,20 +218,18 @@ OR
 The new OOPs constructs introduced by Scala, but not supported by Java:
 
 * Scala Traits
-* Solving Inheritance Diamond Problem automatically, with 
+* Solving Inheritance Diamond Problem automatically 
 
 ### What are call-by-name and call-by-value function parameters?
 
-* In Call-by-name, the function parameters are evaluated only whenever they are needed but not when the function is called.
-* In Call-by-value, the function parameters are evaluated when the function is called.
-* In Call-by-value, the parameters are evaluated before executing function and they are evaluated only once irrespective of how many times we used them in that function.
-* In Call-by-name, the parameters are evaluated whenever we access them and they are evaluated each time we use them in that function.
+Scala's default type of function parameters are _call-by-value_ parameters. _Call-by-value_ parameters are evaluated once, when a function is called.
+
+_Call-by-name_ parameters are not evaluated when the function is called, but they are evaluated each time we use them in that function. You can think of _call-by-name_ parameters as a function with zero parameters (eg: `f: () => A`), but we don't need to write the empty parameter list. This is reflected in their syntax as well `f: => A`
 
 ### What is a trait in Scala?
 Traits are similar to Java interfaces.
 They can share methods and fields with classes and objects which extend a trait.
-Traits can hold implementations of methods and fields.
-
+As opposed to Java interfaces traits can hold implementations of methods and fields.
 
 ### What is a self type?
 A trait can have a self type which has the same effect as if the trait would extend another trait.
@@ -254,7 +253,7 @@ There are 3 types of implicits in Scala
 * Implicit conversion
 * Implicit classes
 
-(Implicit class is just syntactic sugar for a type of implicit conversion so technically there are only 2 types)
+(Implicit class is just syntactic sugar for a type of implicit conversion so technically there are only 2 types. (see the linked article above))
 
 Implicit conversions: when the compiler sees a type mismatch, it searches for implicit conversions, if there's a matching implicit conversion in the scope the compiler can apply the conversion, resolving the type mismatch.
 
@@ -270,24 +269,27 @@ Implicit conversions: automatically converting types, should be used with care, 
 
 ### What is a type class? How does it relate to subtyping?
 Type classes are useful when you want to implement common functionality for an arbitrary set of types.
-It is a form of polymorphism, namely ad-hoc polymorphism, similar to subtyping, but type class instances don't need to be in a subtyping relationship, one can easily implement a type class instance for any type.
+It is a form of polymorphism, similar to subtyping, where you can implement method instances for subtypes of a class or trait, but type class instances don't need to be in a subtyping relationship, one can easily implement a type class instance for any type.
 
 This means that they can be a very useful tool in library design. Type classes can be easily extended/overwritten in application code.
 
 Some examples: Json libraries (Circe), Cats library
 
 ### What is covariace, invariance and contravariance in Scala?
-* Subtyping relationship of a "container" class varying with the subtyping relationship of a "contained" class.
-* Covariance varies in the same direction (So A <: B will mean List[A] <: List[B])
-* Contravariance varies in the opposite direction (So A <: B will mean ContraBox[A] >: ContraBox[B])
-* Invariant type parameters don't affect the container
-
 (A <: B means A is a subtype of B)
 ```scala
 If A <: B
 CovariantBox[A]     <: CovariantBox[B]
 ContravariantBox[A] >: ContravariantBox[B]
 ```
+* _Covariance_ is marked with a `+` preceding the type parameter, eg: `class CovariantBox[+A]...`.
+
+* _Contravariance_ is marked with a `-`, eg: `class ContravariantBox[-A]...`.
+
+* Subtyping relationship of a "container" class varying with the subtyping relationship of a "contained" type.
+* Covariance varies in the same direction (So A <: B will mean List[A] <: List[B])
+* Contravariance varies in the opposite direction (So A <: B will mean ContraBox[A] >: ContraBox[B])
+* Invariant type parameters don't affect the container
 
 ### Why do you like Scala?
 This is a subjective question, think about your own answer.
@@ -298,6 +300,19 @@ This is a subjective question, think about your own answer.
 ### What is a monad?
 The simplest, but not complete answer I found: https://stackoverflow.com/a/49858556
 So shortly a type that has a flatmap and unit function + satisfies monad laws.
+
+```scala
+trait Monad[A] {
+  def flatMap[B](f: A => Monad[B]): Monad[B]
+}
+  
+def unit[A](x: A): Monad[A]
+```
+* The most important thing about _flatMap_ is its type signature, it's more important than the name _flatMap_.
+A _flatMap_ creates a new `Monad[B]` typed value from a `Monad[A]` typed value based on the `A` value inside `Monad[A]`.
+* _unit_ just wraps a value typed `A` in a monad which then will have type `Monad[A]`. In scala this functionality is many times implemented with an `apply` function (Eg: Option.apply, Try.apply, Future.apply, Right.apply)
+* _flatMap_ is also called _bind_ or _>>=_ in Haskell
+* _unit_ is also called _pure_ sometimes.
 
 (Technically this answers the "What is a monad" question, but it doesn't 
 explain it very well how and why one wants to use monads. You can think about those questions as well.)
