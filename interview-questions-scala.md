@@ -265,9 +265,9 @@ Implicit parameters are method parameters which do not have to be explicitly pas
 
 ### 28. What are implicits used for?
 
-Implicit parameters: implicit context, type class, etc.
-Implicit classes: extension methods
-Implicit conversions: automatically converting types, should be used with care, too general types can lead to trouble
+* Implicit parameters: implicit context, type class, etc.
+* Implicit classes: extension methods
+* Implicit conversions: automatically converting types, should be used with care, too general types can lead to trouble
 
 ### 29. What is a type class?
 Type classes are useful when you want to implement common functionality for an arbitrary set of types.
